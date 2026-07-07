@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = import.meta.env.PROD ? 'https://trackingapplication.onrender.com/api' : '/api';
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const userId = localStorage.getItem('userId');
