@@ -1,0 +1,260 @@
+// This is your Prisma schema file for Interview Tracker Pro
+// Database: SQLite (file-based, zero config)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Daily Tracker ──────────────────────────────────────────────
+model DailyTracker {
+  userId String @default("default")
+  id                String   @id @default(uuid())
+  date              String   // YYYY-MM-DD
+  studyHours        Float    @default(0)
+  dsaTopic          String   @default("")
+  problemsSolved    Int      @default(0)
+  difficulty        String   @default("Medium") // Easy, Medium, Hard
+  jsTopic           String   @default("")
+  reactTopic        String   @default("")
+  backendTopic      String   @default("")
+  sqlTopic          String   @default("")
+  dockerTopic       String   @default("")
+  lldTopic          String   @default("")
+  hldTopic          String   @default("")
+  systemDesignTopic String   @default("")
+  revisionCompleted Boolean  @default(false)
+  mockInterview     Boolean  @default(false)
+  jobApplied        Boolean  @default(false)
+  notes             String   @default("")
+  productivity      Int      @default(5) // 1-10
+  energyLevel       Int      @default(5) // 1-10
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ─── DSA Problems ───────────────────────────────────────────────
+model DSAProblem {
+  userId String @default("default")
+  id           String   @id @default(uuid())
+  name         String
+  leetcodeLink String   @default("")
+  platform     String   @default("LeetCode") // LeetCode, HackerRank, CodeForces, etc.
+  topic        String   @default("") // Arrays, Strings, Trees, etc.
+  difficulty   String   @default("Medium") // Easy, Medium, Hard
+  solvedDate   String   @default("") // YYYY-MM-DD
+  timeTaken    Int      @default(0) // in minutes
+  confidence   Int      @default(3) // 1-5
+  revision1    String   @default("") // date
+  revision2    String   @default("") // date
+  revision3    String   @default("") // date
+  status       String   @default("Unsolved") // Unsolved, Solved, Attempted, Review
+  favorite     Boolean  @default(false)
+  bookmark     Boolean  @default(false)
+  tags         String   @default("") // comma-separated
+  notes        String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ─── Concepts ───────────────────────────────────────────────────
+model Concept {
+  userId String @default("default")
+  id               String   @id @default(uuid())
+  subject          String   // JavaScript, React, Node, etc.
+  concept          String
+  started          Boolean  @default(false)
+  completed        Boolean  @default(false)
+  confidence       Int      @default(1) // 1-5
+  interviewReady   Boolean  @default(false)
+  revisionSchedule String   @default("") // JSON array of dates
+  resourceLink     String   @default("")
+  notes            String   @default("")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ─── Subjects ───────────────────────────────────────────────────
+model Subject {
+  userId String @default("default")
+  id              String @id @default(uuid())
+  name            String @unique
+  color           String @default("#5B8CFF")
+  icon            String @default("book")
+  totalConcepts   Int    @default(0)
+  completedCount  Int    @default(0)
+}
+
+// ─── Roadmap Items ──────────────────────────────────────────────
+model RoadmapItem {
+  userId String @default("default")
+  id                String   @id @default(uuid())
+  roadmap           String   // javascript, react, node, sql, python, docker, fastapi, nextjs, cicd, lld, hld, system-design
+  section           String   // section/category name
+  topic             String
+  completed         Boolean  @default(false)
+  estimatedHours    Float    @default(1)
+  youtubeLink       String   @default("")
+  documentationLink String   @default("")
+  notes             String   @default("")
+  order             Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ─── Revision Schedule ──────────────────────────────────────────
+model RevisionSchedule {
+  userId String @default("default")
+  id             String   @id @default(uuid())
+  itemType       String   // dsa, concept, topic
+  itemId         String   // reference to the item
+  itemName       String   @default("") // name for display
+  originalDate   String   // when originally learned
+  revisionDate   String   // when to revise
+  revisionNumber Int      // 1, 2, 3, 4, 5 (Day 1, 3, 7, 15, 30)
+  status         String   @default("Pending") // Pending, Completed, Missed
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── Mock Interviews ────────────────────────────────────────────
+model MockInterview {
+  userId String @default("default")
+  id             String   @id @default(uuid())
+  date           String   // YYYY-MM-DD
+  company        String
+  round          String   @default("") // Phone, Technical, System Design, HR, etc.
+  questionsAsked String   @default("") // JSON array or text
+  rating         Int      @default(3) // 1-5
+  feedback       String   @default("")
+  improvement    String   @default("")
+  nextRevision   String   @default("") // date
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── Job Applications ───────────────────────────────────────────
+model JobApplication {
+  userId String @default("default")
+  id             String   @id @default(uuid())
+  company        String
+  role           String
+  package        String   @default("")
+  location       String   @default("")
+  appliedDate    String   // YYYY-MM-DD
+  status         String   @default("Applied") // Applied, Phone Screen, Technical, Onsite, Offer, Rejected, Withdrawn
+  interviewRound String   @default("")
+  offer          Boolean  @default(false)
+  rejected       Boolean  @default(false)
+  notes          String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── Resume Versions ────────────────────────────────────────────
+model ResumeVersion {
+  userId String @default("default")
+  id          String   @id @default(uuid())
+  version     String
+  atsScore    Int      @default(0) // 0-100
+  lastUpdated String   // YYYY-MM-DD
+  filePath    String   @default("")
+  notes       String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── GitHub Projects ────────────────────────────────────────────
+model GithubProject {
+  userId String @default("default")
+  id          String   @id @default(uuid())
+  name        String
+  repoUrl     String   @default("")
+  commits     Int      @default(0)
+  stars       Int      @default(0)
+  completion  Int      @default(0) // 0-100
+  description String   @default("")
+  techStack   String   @default("") // comma-separated
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Study Sessions ─────────────────────────────────────────────
+model StudySession {
+  userId String @default("default")
+  id        String   @id @default(uuid())
+  date      String   // YYYY-MM-DD
+  startTime String   // HH:mm
+  endTime   String   // HH:mm
+  duration  Float    // in hours
+  subject   String
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+}
+
+// ─── Achievements ───────────────────────────────────────────────
+model Achievement {
+  userId      String   @default("default")
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  icon        String   @default("trophy")
+  xpReward    Int      @default(10)
+  category    String   @default("general") // general, dsa, study, streak, milestone
+  unlockedAt  DateTime?
+  unlocked    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, name])
+}
+
+// ─── User XP & Gamification ─────────────────────────────────────
+model UserXP {
+  userId String @default("default")
+  id             String @id @default(uuid())
+  totalXP        Int    @default(0)
+  level          Int    @default(1)
+  currentStreak  Int    @default(0)
+  longestStreak  Int    @default(0)
+  lastActiveDate String @default("")
+}
+
+// ─── Notifications ──────────────────────────────────────────────
+model Notification {
+  userId String @default("default")
+  id           String   @id @default(uuid())
+  type         String   // revision, study, interview, application
+  title        String
+  message      String
+  read         Boolean  @default(false)
+  scheduledFor String   @default("") // YYYY-MM-DD
+  createdAt    DateTime @default(now())
+}
+
+// ─── Settings ───────────────────────────────────────────────────
+model Settings {
+  userId String @default("default")
+  id                String @id @default(uuid())
+  theme             String @default("dark") // dark, light
+  userName          String @default("Developer")
+  avatarUrl         String @default("")
+  goalHoursPerDay   Float  @default(6)
+  targetDays        Int    @default(90)
+  startDate         String @default("") // YYYY-MM-DD
+  notifyRevisions   Boolean @default(true)
+  notifyStudy       Boolean @default(true)
+  notifyInterviews  Boolean @default(true)
+}
+
+
+// ─── Authentication ───────────────────────────────────────────────
+model User {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
