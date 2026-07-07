@@ -62,7 +62,7 @@ router.get('/subjects/all', async (_req: Request, res: Response) => {
     });
 
     const withCompletion = await Promise.all(
-      subjects.map(async (s) => {
+      subjects.map(async (s: any) => {
         const completed = await prisma.concept.count({
           where: { subject: s.subject, completed: true },
         });

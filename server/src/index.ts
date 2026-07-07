@@ -33,13 +33,14 @@ export const prisma = basePrisma.$extends({
         const store = als.getStore();
         if (store?.userId) {
            const userId = store.userId;
+           const a = args as any;
            if (['findMany', 'findFirst', 'count', 'aggregate', 'groupBy'].includes(operation as string)) {
-              args.where = { ...args.where, userId };
+              a.where = { ...a.where, userId };
            } else if (operation === 'create') {
-              args.data = { ...args.data, userId };
+              a.data = { ...a.data, userId };
            } else if (operation === 'createMany') {
-              if (Array.isArray(args.data)) {
-                 args.data = args.data.map((d: any) => ({ ...d, userId }));
+              if (Array.isArray(a.data)) {
+                 a.data = a.data.map((d: any) => ({ ...d, userId }));
               }
            }
         }

@@ -81,7 +81,7 @@ router.get('/progress/all', async (_req: Request, res: Response) => {
     }
 
     const progress = await Promise.all(
-      roadmaps.map(async (r) => {
+      roadmaps.map(async (r: any) => {
         const completed = await prisma.roadmapItem.count({
           where: { roadmap: r.roadmap, completed: true },
         });

@@ -70,7 +70,7 @@ router.get('/dashboard', async (_req: Request, res: Response) => {
       where: { date: { gte: weekAgo.toISOString().split('T')[0] } },
       select: { date: true, studyHours: true },
     });
-    const weeklyHours = weeklyEntries.reduce((sum, e) => sum + e.studyHours, 0);
+    const weeklyHours = weeklyEntries.reduce((sum: number, e: any) => sum + e.studyHours, 0);
 
     // Monthly hours
     const monthAgo = new Date();
@@ -79,7 +79,7 @@ router.get('/dashboard', async (_req: Request, res: Response) => {
       where: { date: { gte: monthAgo.toISOString().split('T')[0] } },
       select: { date: true, studyHours: true },
     });
-    const monthlyHours = monthlyEntries.reduce((sum, e) => sum + e.studyHours, 0);
+    const monthlyHours = monthlyEntries.reduce((sum: number, e: any) => sum + e.studyHours, 0);
 
     // Roadmap progress
     const roadmapTotal = await prisma.roadmapItem.count();

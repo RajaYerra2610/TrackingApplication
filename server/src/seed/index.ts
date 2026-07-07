@@ -56,7 +56,7 @@ async function main() {
 
   for (const a of achievements) {
     await prisma.achievement.upsert({
-      where: { name: a.name },
+      where: { userId_name: { userId: 'default', name: a.name } },
       update: {},
       create: a,
     });
