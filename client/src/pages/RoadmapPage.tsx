@@ -131,7 +131,8 @@ export default function RoadmapPage() {
 
       {/* Sections */}
       <div className="space-y-3">
-        {Object.entries(sections).map(([section, sectionItems], si) => {
+        {Object.entries(sections).map(([section, rawSectionItems], si) => {
+          const sectionItems = rawSectionItems as any[];
           const sectionCompleted = sectionItems.filter((i: any) => i.completed).length;
           const sectionProgress = Math.round((sectionCompleted / sectionItems.length) * 100);
           const isExpanded = expandedSections.has(section);

@@ -86,7 +86,7 @@ export default function GitHubProjects() {
            {Array.from({length: 3}).map((_, i) => <div key={i} className="skeleton h-40 rounded-xl" />)}
         </div>
       ) : projects.length === 0 ? (
-        <EmptyState icon={Github} title="No Projects Yet" description="Track your top projects to show off to recruiters." action={{ label: 'Add Project', onClick: () => setShowModal(true) }} />
+        <EmptyState icon={Github as any} title="No Projects Yet" description="Track your top projects to show off to recruiters." action={{ label: 'Add Project', onClick: () => setShowModal(true) }} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {projects.map((project, i) => (

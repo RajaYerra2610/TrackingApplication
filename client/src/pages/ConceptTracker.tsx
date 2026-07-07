@@ -54,7 +54,8 @@ export default function ConceptTracker() {
       {concepts.length === 0 ? (
         <EmptyState icon={BookOpen} title="No Concepts" description="Start tracking concepts you learn" action={{ label: 'Add Concept', onClick: () => setShowModal(true) }} />
       ) : (
-        Object.entries(grouped).map(([subject, items]) => {
+        Object.entries(grouped).map(([subject, rawItems]) => {
+          const items = rawItems as any[];
           const completed = items.filter((c: any) => c.completed).length;
           const progress = Math.round((completed / items.length) * 100);
           const isExpanded = expandedSubjects.has(subject);
